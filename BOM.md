@@ -57,13 +57,19 @@
 
 ## HARDWARE
 
-| Item | Description | Qty | Price | Link |
-|------|-------------|-----|-------|------|
-| 1 | M3x40 Spacers | 9 | | |
-| 2 | M3 Thumb nuts | 4 | | |
-| 3 | M3 Bolts | 10 | | |
-| 4 | M3 nuts | 10 | | |
-| 5 | Assorted Hardware | 20 | | |
+| Item | Description | Qty |
+|------|-------------|-----|
+| 1 | M3x40 Spacers | 9 |
+| 2 | M3 Thumb nuts | 4 |
+| 3 | M3 x 12 Bolts | 12 |
+| 4 | M3 nuts | 20 |
+| 5 | M4 x 8 Bolts | 6 |
+| 6 | M2.5 x 6 Bolts | 8 |
+| 7 | M2.5 x 8 Bolts | 4 |
+| 8 | M3 x 8 Bolts | 4 |
+| 9 | M3 x 20 Bolts | 4 |
+| 10 | M2.5 nuts | 12 |
+| 11 | Assorted Hardware | 20 |
 
 ## BATTERY
 
