@@ -18,76 +18,31 @@
 ---
 
 > [!WARNING]
-> ## ⚠️ Important Disclaimer
->
-> This open-source hardware release is part of our ongoing development process. While we're committed to transparency and community collaboration, please note:
->
-> - **This is a v0.9 release** - The design may undergo revisions and improvements
-> - **Breaking changes are possible** - We may introduce modifications that are not backward compatible
-> - **No warranty for DIY builds** - Self-built robots are provided as-is without guarantees
->
-> ### 🛡️ Upgrade Guarantee
->
-> **If you purchase a Mars robot directly from us**, you'll receive:
-> - ✅ Full hardware and software support
-> - ✅ Guaranteed upgrades to future versions
-> - ✅ Access to our technical support team
-> - ✅ Quality-tested components and assembly
+> **This is a v0.9 release** - Breaking changes may occur. DIY builds are as-is without warranty.
+> Purchase from us for guaranteed upgrades and full support.
 
 ---
 
 ## Project Structure
 
-### 📁 Printed Parts
-- **Shell**: `printed-parts/shells/shell.STEP`
-- **Layers**: 
-  - Layer 1: `printed-parts/layers/layer1.STEP`
-  - Layer 2: `printed-parts/layers/layer2.STEP`
-  - Layer 3: `printed-parts/layers/layer3.STEP`
-  - Layer 4: `printed-parts/layers/Layer4.STEP`
-- **Head**: `printed-parts/heads/head.STEP`
-- **Arm Links**: 
-  - Link 1: `printed-parts/arm/link1.STEP`
-  - Link 2: `printed-parts/arm/link2.STEP`
-  - Link 3: `printed-parts/arm/link3.STEP`
-  - Link 4: `printed-parts/arm/link4.STEP`
-  - Link 5: `printed-parts/arm/link5.STEP`
-  - Link 6-1: `printed-parts/arm/link61.STEP`
-  - Link 6-2: `printed-parts/arm/link62.STEP`
-- **Layer Components**:
-  - Battery Cover: `printed-parts/layer-components/batter_holder_2_cover.STEP`
-  - USB Holder: `printed-parts/layer-components/usb_holder.STEP`
+This repository contains all the hardware design files you need to build a Mars robot:
 
-### 📁 PCBs
-- **Head PCB**: 
-  - KiCad Project: `pcbs/head-pcb/leader.kicad_pro`
-  - Production Files: `pcbs/head-pcb/production/`
-  - BOM: `pcbs/head-pcb/production/bom.csv`
-- **Main Dev Board**:
-  - KiCad Project: `pcbs/main-dev-board/innate dev pcb.kicad_pro`
-  - Production Files: `pcbs/main-dev-board/production/`
-  - BOM: `pcbs/main-dev-board/production/bom.csv`
+### 📁 [Printed Parts](printed-parts/)
+3D printable components including shells, layers, arm links, head, and mounting hardware. See the [printed-parts README](printed-parts/README.md) for details.
 
-### 📁 Documentation
-- **Bill of Materials**: [BOM.md](BOM.md)
-- **Assemblies**: [assemblies.zip](assemblies.zip)
+### 📁 [PCBs](pcbs/)
+KiCad projects and production files for the head PCB and main development board. See the [pcbs README](pcbs/README.md) for details.
+
+### 📄 Documentation
+- **[Bill of Materials](BOM.md)** - Complete parts list with sourcing information
+- **[Assembly Guide](assemblies.zip)** - Step-by-step assembly instructions
 
 ## Getting Started
 
-1. Review the [Bill of Materials](BOM.md) for a complete parts list
-2. Check the PCB production files in the `pcbs/` directory for manufacturing
-3. Use the STEP files in `printed-parts/` for 3D printing
-4. Refer to the KiCad project files for PCB modifications
-
-## Manufacturing
-
-### PCB Fabrication
-- Use the production files in each PCB directory
-- Submit the `.zip` files along with the BOM and positions CSV to your PCB manufacturer
-
-### 3D Printing
-- All STEP files are ready for 3D printing
-- Recommended materials and settings can be found in the BOM
+1. **Review the [Bill of Materials](BOM.md)** - Source all required components
+2. **Order PCBs** - See [pcbs/README.md](pcbs/README.md) for manufacturing instructions  
+3. **3D Print Parts** - See [printed-parts/README.md](printed-parts/README.md) for printing guidelines
+4. **Assemble** - Follow the instructions in [assemblies.zip](assemblies.zip)
 
 ## Contributing
 
