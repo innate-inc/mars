@@ -3,7 +3,7 @@
 <!-- Add your banner image here -->
 <!-- ![Mars Robot Banner](./assets/banner.png) -->
 
-# Mars v0.9 - Open Source Hardware
+# Mars - A Personal AI Robot
 
 *Complete design files and documentation for the Mars robot platform*
 
@@ -18,10 +18,16 @@
 ---
 
 > [!WARNING]
-> **This is a v0.9 release** - Breaking changes may occur. DIY builds are as-is without warranty.
+> **This is an alpha release** - Breaking changes may occur. DIY builds are as-is without warranty.
 > Purchase from us for guaranteed upgrades and full support.
 
 ---
+
+## Philosophy
+
+At Innate, we believe every builder should be a part of the robotics revolution, just like they were for the Personal Computer revolution.
+
+To do so, two things are required: making robots more affordable, but also more intuitive to build with. MARS is our first platform and comes with everything we believe is required for a general-purpose robot: navigation, manipulation, interaction with the best of AI.
 
 ## Project Structure
 
@@ -82,7 +88,7 @@ This ensures that any software modifications or derivative works remain open sou
 
 <div align="center">
 
-**Built with ❤️ by the Innate community**
+**Built with 💙 by Innate in Palo Alto, California**
 
 [Discord](https://discord.gg/your-invite-link) • [Documentation](https://docs.yoursite.com) • [Website](https://yourwebsite.com)
 
