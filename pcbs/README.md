@@ -37,28 +37,7 @@ The main development board is the brain of the robot, handling computation and m
 - [Designators Reference](main-dev-board/production/designators.csv)
 - [IPC Netlist](main-dev-board/production/netlist.ipc)
 
-## 🏭 Manufacturing
-
-### Ordering PCBs
-
-1. **Choose a PCB Manufacturer** (JLCPCB, PCBWay, OSH Park, etc.)
-2. **Upload the Gerber ZIP file** from the production folder
-3. **Specify board parameters**:
-   - Board thickness: Check KiCad files (typically 1.6mm)
-   - Copper weight: 1oz (35μm) standard
-   - Surface finish: HASL or ENIG recommended
-   - Solder mask color: Your preference
-4. **Order assembly** (optional) - Upload BOM and position files for SMT assembly
-
-### Component Assembly
-
-For DIY assembly:
-- Use the **BOM CSV** to source all components
-- Reference the **positions CSV** for component placement
-- Use the **designators CSV** to identify components on the board
-- Follow standard SMT/THT soldering practices
-
-### Design Modifications
+## Design Modifications
 
 To modify the PCB designs:
 1. Install [KiCad 7.0+](https://www.kicad.org/)

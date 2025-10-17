@@ -27,9 +27,26 @@
 
 At Innate, we believe every builder should be a part of the robotics revolution, just like they were for the Personal Computer revolution.
 
-To do so, two things are required: making robots more affordable, but also more intuitive to build with. MARS is our first platform and comes with everything we believe is required for a general-purpose robot: navigation, manipulation, interaction with the best of AI.
+To do so, two things are required: making robots **affordable**, but also **intuitive** and **powerful** to build with. MARS is our first platform and comes with every compute and sensor required for a general-purpose robot: navigation, manipulation, interaction with the best of AI.
 
-## Project Structure
+With it, you can run (and build) VLAs, embodied agents, world models, and every other crazy idea you might have, for a BOM <$1k!
+
+## Key Specifications
+
+### Robotic Arm
+- **Degrees of Freedom**: 5-DOF manipulator with modular end effector
+- **Reach**: 10 inches (254mm) maximum
+- **Payload**: 200g at full extension
+- **Integrated Camera**: 150° field of view for vision-based manipulation
+
+### Power
+- **Battery Life**: ~5 hours with all systems running (navigation, manipulation, compute) using an 8000mAh battery*
+  
+*Battery delivered by Innate
+
+For complete specifications, visit the [official documentation](https://docs.innate.bot).
+
+## Repository Structure
 
 This repository contains all the hardware design files you need to build a Mars robot:
 

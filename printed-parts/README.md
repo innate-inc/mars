@@ -32,14 +32,3 @@ All 3D printable components for the Mars robot. Files are provided in STEP forma
 
 - **[batter_holder_2_cover.STEP](layer-components/batter_holder_2_cover.STEP)** - Battery holder cover
 - **[usb_holder.STEP](layer-components/usb_holder.STEP)** - USB cable holder
-
-## 3D Printing Recommendations
-
-- **Material**: PLA, PETG, or ABS recommended
-- **Layer Height**: 0.2mm for most parts, 0.1mm for precision parts
-- **Infill**: 20-30% for structural parts
-- **Supports**: Required for overhangs > 45°
-- **Print Orientation**: Position parts for optimal strength along load-bearing axes
-
-For detailed printing settings and material specifications, refer to the [main BOM](../BOM.md).
-
