@@ -7,9 +7,10 @@
 
 *Complete design files and documentation for the Mars robot platform*
 
-[![Discord](https://img.shields.io/badge/Discord-Join%20our%20community-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/your-invite-link)
-[![Documentation](https://img.shields.io/badge/Docs-Read%20the%20docs-blue?style=for-the-badge&logo=readthedocs&logoColor=white)](https://docs.yoursite.com)
-[![Website](https://img.shields.io/badge/Website-Visit%20us-orange?style=for-the-badge&logo=safari&logoColor=white)](https://yourwebsite.com)
+[![Discord](https://img.shields.io/badge/Discord-Join%20our%20community-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/innate)
+[![Documentation](https://img.shields.io/badge/Docs-Read%20the%20docs-blue?style=for-the-badge&logo=readthedocs&logoColor=white)](https://docs.innate.bot)
+[![Website](https://img.shields.io/badge/Website-Visit%20us-orange?style=for-the-badge&logo=safari&logoColor=white)](https://innate.bot)
+[![Apply for Beta](https://img.shields.io/badge/Apply%20for%20Closed%20Beta-brightgreen?style=for-the-badge)](https://tally.so/r/kdAX66)
 [![License: CERN-OHL-S-2.0](https://img.shields.io/badge/Hardware%20License-CERN--OHL--S--2.0-green?style=for-the-badge)](LICENSE-HARDWARE)
 [![License: GPL v3](https://img.shields.io/badge/Software%20License-GPL%20v3-blue?style=for-the-badge)](LICENSE-SOFTWARE)
 
@@ -30,6 +31,8 @@ At Innate, we believe every builder should be a part of the robotics revolution,
 To do so, two things are required: making robots **affordable**, but also **intuitive** and **powerful** to build with. MARS is our first platform and comes with every compute and sensor required for a general-purpose robot: navigation, manipulation, interaction with the best of AI.
 
 With it, you can run (and build) VLAs, embodied agents, world models, and every other crazy idea you might have, for a BOM <$1k!
+
+For the best hardware experience, we recommend our kit — but the OS and simulation work for anyone.
 
 ## Key Specifications
 
@@ -70,12 +73,12 @@ KiCad projects and production files for the head PCB and main development board.
 ## Contributing
 
 We welcome contributions from the community! Feel free to:
-- 🐛 Report bugs and issues
-- 💡 Suggest new features and improvements
-- 🔧 Submit pull requests
-- 📖 Improve documentation
+- 🐛 Report bugs or issues with PCB designs, print tolerances, or assembly
+- 💡 Suggest alternative parts or BOM improvements
+- 🔧 Submit PRs for documentation or design files
+- 📖 Share your build — we love seeing what people make
 
-Please join our [Discord community](https://discord.gg/your-invite-link) to discuss your ideas before making major changes.
+Join our [Discord](https://discord.gg/innate) to discuss ideas before making major changes.
 
 ---
 
@@ -94,11 +97,9 @@ This is a copyleft license that ensures any modifications or derivative works mu
 
 ### Software License: GPL v3
 
-The software components for this robot (to be released separately) are licensed under the **GNU General Public License v3.0** (GPL v3).
+The software ([innate-os](https://github.com/innate-inc/innate-os)) is licensed under the **GNU General Public License v3.0** (GPL v3).
 
-This ensures that any software modifications or derivative works remain open source and available to the community.
-
-📄 [View Software License](LICENSE-SOFTWARE) *(Software repository coming soon)*  
+📄 [View Software License](LICENSE-SOFTWARE)  
 🔗 [Learn more about GPL v3](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 ---
@@ -107,6 +108,6 @@ This ensures that any software modifications or derivative works remain open sou
 
 **Built with 💙 by Innate in Palo Alto, California**
 
-[Discord](https://discord.gg/your-invite-link) • [Documentation](https://docs.yoursite.com) • [Website](https://yourwebsite.com)
+[Discord](https://discord.gg/innate) • [Documentation](https://docs.innate.bot) • [Website](https://innate.bot)
 
 </div>
