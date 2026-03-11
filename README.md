@@ -10,7 +10,7 @@
 [![Discord](https://img.shields.io/badge/Discord-Join%20our%20community-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/innate)
 [![Documentation](https://img.shields.io/badge/Docs-Read%20the%20docs-blue?style=for-the-badge&logo=readthedocs&logoColor=white)](https://docs.innate.bot)
 [![Website](https://img.shields.io/badge/Website-Visit%20us-orange?style=for-the-badge&logo=safari&logoColor=white)](https://innate.bot)
-[![Apply for Beta](https://img.shields.io/badge/Apply%20for%20Closed%20Beta-brightgreen?style=for-the-badge)](https://tally.so/r/kdAX66)
+[![Apply for Beta](https://img.shields.io/badge/Closed%20Beta-Apply%20Now-blueviolet?style=for-the-badge&logo=rocket.chat&logoColor=white)](https://tally.so/r/kdAX66)
 [![License: CERN-OHL-S-2.0](https://img.shields.io/badge/Hardware%20License-CERN--OHL--S--2.0-green?style=for-the-badge)](LICENSE-HARDWARE)
 [![License: GPL v3](https://img.shields.io/badge/Software%20License-GPL%20v3-blue?style=for-the-badge)](LICENSE-SOFTWARE)
 
