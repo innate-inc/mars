@@ -14,6 +14,7 @@ import shutil
 import signal
 import subprocess
 import sys
+import threading
 import time
 from collections import deque
 from pathlib import Path
@@ -139,6 +140,50 @@ class DashboardHistory:
 
     def seed_from_snapshot(self, snapshot: dict[str, object]) -> None:
         self.add(snapshot)
+
+
+class DashboardRuntime:
+    def __init__(self, config: dict[str, object], *, log_cache_lines: int = 160):
+        self.config = config
+        self.log_cache_lines = log_cache_lines
+        self.lock = threading.Lock()
+        self.stop_event = threading.Event()
+        self.snapshot = collect_status_snapshot(config)
+        self.snapshot_rev = 1
+        self.logs: dict[str, list[str]] = self._collect_logs(self.snapshot)
+        self.log_rev = 1
+
+    def _collect_logs(self, snapshot: dict[str, object]) -> dict[str, list[str]]:
+        logs = {
+            "simulator": capture_simulator_logs(
+                bool(snapshot["sim_running"]), lines=self.log_cache_lines
+            ),
+            "brain": capture_os_brain_logs(self.config, lines=self.log_cache_lines),
+        }
+        if self.config["mode"] != HOSTED_MODE:
+            logs["agent"] = capture_agent_logs(self.config, lines=self.log_cache_lines)
+        return logs
+
+    def read(self) -> tuple[dict[str, object], dict[str, list[str]], int, int]:
+        with self.lock:
+            snapshot = dict(self.snapshot)
+            logs = {name: list(lines) for name, lines in self.logs.items()}
+            return snapshot, logs, self.snapshot_rev, self.log_rev
+
+    def set_snapshot(self, snapshot: dict[str, object]) -> None:
+        with self.lock:
+            self.snapshot = snapshot
+            self.snapshot_rev += 1
+
+    def refresh_snapshot(self) -> None:
+        self.set_snapshot(collect_status_snapshot(self.config))
+
+    def set_log(self, name: str, lines: list[str]) -> None:
+        with self.lock:
+            if self.logs.get(name) == lines:
+                return
+            self.logs[name] = lines
+            self.log_rev += 1
 
 
 def log(message: str) -> None:
@@ -957,6 +1002,80 @@ def capture_simulator_logs(
     return selected or ["Simulator log is empty."]
 
 
+def dashboard_snapshot_worker(runtime: DashboardRuntime, interval_seconds: float = 0.5) -> None:
+    while not runtime.stop_event.is_set():
+        runtime.refresh_snapshot()
+        runtime.stop_event.wait(interval_seconds)
+
+
+def dashboard_simulator_log_worker(
+    runtime: DashboardRuntime, interval_seconds: float = 0.1
+) -> None:
+    while not runtime.stop_event.is_set():
+        snapshot, _, _, _ = runtime.read()
+        runtime.set_log(
+            "simulator",
+            capture_simulator_logs(
+                bool(snapshot["sim_running"]), lines=runtime.log_cache_lines
+            ),
+        )
+        runtime.stop_event.wait(interval_seconds)
+
+
+def dashboard_brain_log_worker(
+    runtime: DashboardRuntime, interval_seconds: float = 0.35
+) -> None:
+    while not runtime.stop_event.is_set():
+        runtime.set_log(
+            "brain",
+            capture_os_brain_logs(runtime.config, lines=runtime.log_cache_lines),
+        )
+        runtime.stop_event.wait(interval_seconds)
+
+
+def dashboard_agent_log_worker(
+    runtime: DashboardRuntime, interval_seconds: float = 0.5
+) -> None:
+    while not runtime.stop_event.is_set():
+        runtime.set_log(
+            "agent",
+            capture_agent_logs(runtime.config, lines=runtime.log_cache_lines),
+        )
+        runtime.stop_event.wait(interval_seconds)
+
+
+@contextlib.contextmanager
+def dashboard_runtime(config: dict[str, object]):
+    runtime = DashboardRuntime(config)
+    threads = [
+        threading.Thread(
+            target=dashboard_snapshot_worker, args=(runtime,), daemon=True
+        ),
+        threading.Thread(
+            target=dashboard_simulator_log_worker, args=(runtime,), daemon=True
+        ),
+        threading.Thread(
+            target=dashboard_brain_log_worker, args=(runtime,), daemon=True
+        ),
+    ]
+    if config["mode"] != HOSTED_MODE:
+        threads.append(
+            threading.Thread(
+                target=dashboard_agent_log_worker, args=(runtime,), daemon=True
+            )
+        )
+
+    for thread in threads:
+        thread.start()
+
+    try:
+        yield runtime
+    finally:
+        runtime.stop_event.set()
+        for thread in threads:
+            thread.join(timeout=1.0)
+
+
 def pick_primary_fps(metrics: dict[str, object]) -> float:
     fps_by_camera = metrics.get("fps_by_camera", {}) if isinstance(metrics, dict) else {}
     if not isinstance(fps_by_camera, dict):
@@ -1650,6 +1769,7 @@ def render_status(
     history: DashboardHistory | None = None,
     clear: bool = True,
     snapshot: dict[str, object] | None = None,
+    cached_logs: dict[str, list[str]] | None = None,
 ) -> None:
     if clear:
         clear_screen()
@@ -1730,27 +1850,42 @@ def render_status(
         used_lines += 5
     available_height = max(term_height - used_lines, 10)
     visible_log_rows = max(available_height - 2, 1)
+    simulator_lines = (
+        cached_logs["simulator"]
+        if cached_logs is not None and "simulator" in cached_logs
+        else capture_simulator_logs(
+            bool(snapshot["sim_running"]),
+            lines=visible_log_rows,
+        )
+    )
+    brain_lines = (
+        cached_logs["brain"]
+        if cached_logs is not None and "brain" in cached_logs
+        else capture_os_brain_logs(config, lines=visible_log_rows)
+    )
     log_columns = [
         (
             f"SIMULATOR LOGS [{str(snapshot['sim_log_mode']).upper()}]",
-            capture_simulator_logs(
-                bool(snapshot["sim_running"]),
-                lines=visible_log_rows,
-            ),
+            simulator_lines,
             THEME["log_sim"],
         ),
         (
             "OS BRAIN LOGS",
-            capture_os_brain_logs(config, lines=visible_log_rows),
+            brain_lines,
             THEME["log_brain"],
         ),
     ]
     if config["mode"] != HOSTED_MODE:
+        agent_lines = (
+            cached_logs["agent"]
+            if cached_logs is not None and "agent" in cached_logs
+            else capture_agent_logs(config, lines=visible_log_rows)
+        )
         log_columns.insert(
             1,
             (
                 "AGENT LOGS",
-                capture_agent_logs(config, lines=visible_log_rows),
+                agent_lines,
                 THEME["log_agent"],
             ),
         )
@@ -1771,6 +1906,7 @@ def render_status_text(
     verbose: bool = False,
     history: DashboardHistory | None = None,
     snapshot: dict[str, object] | None = None,
+    cached_logs: dict[str, list[str]] | None = None,
 ) -> str:
     buffer = io.StringIO()
     with contextlib.redirect_stdout(buffer):
@@ -1780,6 +1916,7 @@ def render_status_text(
             history=history,
             clear=False,
             snapshot=snapshot,
+            cached_logs=cached_logs,
         )
     return buffer.getvalue()
 
@@ -1841,14 +1978,28 @@ def watch_dashboard(
     simulator_port = str(config["raw_env"].get("SIMULATOR_PORT", "8000"))  # type: ignore[index]
     sim_log_mode = str(config.get("sim_log_mode", "quiet"))
     try:
-        with live_dashboard_terminal(), dashboard_input_mode() as input_mode_enabled:
+        with (
+            dashboard_runtime(config) as runtime,
+            live_dashboard_terminal(),
+            dashboard_input_mode() as input_mode_enabled,
+        ):
+            snapshot, cached_logs, snapshot_rev, log_rev = runtime.read()
+            history.seed_from_snapshot(snapshot)
+            last_snapshot_rev = snapshot_rev
+            last_log_rev = log_rev
             next_refresh = 0.0
             while True:
                 now = time.monotonic()
-                if redraw or now >= next_refresh:
-                    snapshot = collect_status_snapshot(config)
+                snapshot, cached_logs, snapshot_rev, log_rev = runtime.read()
+                if snapshot_rev != last_snapshot_rev:
                     history.add(snapshot)
                     sim_log_mode = str(snapshot.get("sim_log_mode", sim_log_mode))
+                    last_snapshot_rev = snapshot_rev
+                    redraw = True
+                if log_rev != last_log_rev:
+                    last_log_rev = log_rev
+                    redraw = True
+                if redraw or now >= next_refresh:
                     sys.stdout.write("\033[H\033[J")
                     sys.stdout.write(
                         render_status_text(
@@ -1856,6 +2007,7 @@ def watch_dashboard(
                             verbose=verbose,
                             history=history,
                             snapshot=snapshot,
+                            cached_logs=cached_logs,
                         )
                     )
                     sys.stdout.flush()
@@ -1876,6 +2028,7 @@ def watch_dashboard(
                     target_mode = "quiet" if sim_log_mode == "debug" else "debug"
                     if set_simulator_log_mode(simulator_port, target_mode):
                         sim_log_mode = target_mode
+                        runtime.refresh_snapshot()
                     redraw = True
                     next_refresh = 0.0
                 elif normalized == "q":
