@@ -26,7 +26,7 @@ cd mars/os
 ```
 
 If `.env` does not exist yet, the launcher creates it from `.env.template` automatically.
-On interactive terminals, `up` now drops into a live dashboard after startup. It keeps the simulator, agent, and brain logs visible together and adds a `btop`-style metrics band at the top. Use `d` to toggle the simulator's real runtime log mode between `quiet` and `debug` without restarting, and `q` or `Ctrl+C` to leave the dashboard while keeping the stack running.
+On interactive terminals, `up` now drops into a live dashboard after startup. It keeps the simulator, agent, and brain logs visible together and adds a `btop`-style metrics band at the top. Use `d` to toggle the simulator's real runtime log mode between `quiet` and `debug` without restarting, `q` to leave the dashboard while keeping the stack running, and `Ctrl+C` to stop the full stack.
 
 If you want the native simulator viewer window for a run:
 

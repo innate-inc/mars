@@ -1869,7 +1869,7 @@ def render_status(
         used_lines += 1
     print(f"{BOLD}Logs:{NC} ./mars-dev logs startup")
     used_lines += 1
-    print(f"{DIM}Keys: q quit  d toggle sim logs  v verbose  Ctrl+C quit{NC}")
+    print(f"{DIM}Keys: q detach  d toggle sim logs  v verbose  Ctrl+C stop stack{NC}")
     used_lines += 1
     marquee_lines = render_robot_marquee(term_width)
     for marquee_line in marquee_lines:
@@ -2002,7 +2002,7 @@ def live_dashboard_terminal():
 
 def watch_dashboard(
     config: dict[str, object], *, verbose: bool = False, refresh_seconds: float = 0.5
-) -> None:
+) -> str:
     redraw = True
     history = DashboardHistory()
     simulator_port = str(config["raw_env"].get("SIMULATOR_PORT", "8000"))  # type: ignore[index]
@@ -2064,10 +2064,11 @@ def watch_dashboard(
                 elif normalized == "q":
                     print()
                     success("Left the live dashboard. The stack is still running.")
-                    return
+                    return "detach"
     except KeyboardInterrupt:
-        print()
-        success("Left the live dashboard. The stack is still running.")
+        return "shutdown"
+
+    return "detach"
 
 
 def cmd_up(
@@ -2076,26 +2077,40 @@ def cmd_up(
     watch: bool = SHOW_LIVE_DASHBOARD_DEFAULT,
     sim_visualization_override: bool | None = None,
 ) -> None:
-    if sim_visualization_override is not None:
-        config = {**config, "sim_visualization": sim_visualization_override}
-    print_banner()
-    ensure_dependency("docker")
-    os_env_file = build_os_env(config)
-    cloud_env_file = build_cloud_env(config)
-    sim_python = ensure_sim_setup(config)
+    started = False
+    try:
+        if sim_visualization_override is not None:
+            config = {**config, "sim_visualization": sim_visualization_override}
+        print_banner()
+        ensure_dependency("docker")
+        os_env_file = build_os_env(config)
+        cloud_env_file = build_cloud_env(config)
+        sim_python = ensure_sim_setup(config)
 
-    start_cloud_agent(config, cloud_env_file)
-    ensure_os_container(config, os_env_file)
-    start_simulator(config, sim_python)
+        started = True
+        start_cloud_agent(config, cloud_env_file)
+        ensure_os_container(config, os_env_file)
+        start_simulator(config, sim_python)
 
-    simulator_port = config["raw_env"].get("SIMULATOR_PORT", "8000")  # type: ignore[index]
-    log("Waiting for the simulator HTTP endpoint...")
-    wait_for_simulator_http(str(simulator_port))
-    success("Mars workspace is up.")
-    if watch and sys.stdout.isatty():
-        watch_dashboard(config)
-    else:
-        print_status(config)
+        simulator_port = config["raw_env"].get("SIMULATOR_PORT", "8000")  # type: ignore[index]
+        log("Waiting for the simulator HTTP endpoint...")
+        wait_for_simulator_http(str(simulator_port))
+        success("Mars workspace is up.")
+        if watch and sys.stdout.isatty():
+            dashboard_result = watch_dashboard(config)
+            if dashboard_result == "shutdown":
+                print()
+                log("Ctrl+C received. Stopping Mars workspace...")
+                cmd_down(config)
+        else:
+            print_status(config)
+    except KeyboardInterrupt:
+        print()
+        if started:
+            warn("Interrupted. Stopping Mars workspace...")
+            cmd_down(config)
+        else:
+            warn("Interrupted before the Mars workspace finished starting.")
 
 
 def cmd_down(config: dict[str, object]) -> None:
