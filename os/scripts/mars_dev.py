@@ -86,28 +86,6 @@ TRUECOLOR = USE_COLOR and os.environ.get("COLORTERM", "").lower() in {
     "24bit",
 }
 ANSI_ESCAPE_RE = re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
-SIM_LOG_FILTER_PATTERNS = [
-    re.compile(r'^INFO:\s+\d+\.\d+\.\d+\.\d+:\d+\s+-\s+"GET /(video_feeds_ready|stack_metrics)\b'),
-    re.compile(r"^\[ROSBridge\] Received navigation path with \d+ waypoints"),
-    re.compile(r"^\[ROSBridge\] Target final orientation: "),
-    re.compile(r"^\[NavController\] Received navigation path with \d+ waypoints"),
-    re.compile(r"^\[NavController\] Reached waypoint \d+"),
-    re.compile(r"^\[NavController\] Path: NavigationPathMsg"),
-    re.compile(r"^\[NavController\] Path: \("),
-    re.compile(r"^\[NavController\] Starting path following with \d+ waypoints"),
-    re.compile(r"^\[NavController\] Sent trajectory visualization command"),
-    re.compile(r"^\[NavController\] Position reached but orientation off by "),
-    re.compile(r"^\[NavController\] Reached final goal at "),
-    re.compile(r"^\[NavController\] Cleared trajectory visualization"),
-    re.compile(r"^\[NavController\] Navigation ended with status: "),
-    re.compile(r"^Waypoint \d+"),
-    re.compile(r"^Commanded vel: "),
-    re.compile(r"^\[SimulationNode\] Drawing trajectory: "),
-    re.compile(r"^\[SimulationNode\] Trajectory visualization complete: "),
-    re.compile(r"^\[SimulationNode\] Clearing \d+ trajectory objects"),
-    re.compile(r"^\[ROSBridge\] Queue status: "),
-    re.compile(r"^\[ROSBridge\] Chat message latency: "),
-]
 
 THEME = {
     "title": (238, 238, 238),
@@ -205,6 +183,24 @@ def format_level(level: str, label: str) -> str:
     else:
         color = RED
     return f"{color}{label}{NC}"
+
+
+def format_sim_log_badge(mode: str) -> str:
+    normalized = (mode or "quiet").strip().lower()
+    if normalized == "debug":
+        return f"{BOLD}{YELLOW}DEBUG ON{NC}"
+    if normalized == "quiet":
+        return f"{BOLD}{CYAN}QUIET FILTER ON{NC}"
+    return f"{BOLD}{normalized.upper()}{NC}"
+
+
+def describe_sim_log_mode(mode: str) -> str:
+    normalized = (mode or "quiet").strip().lower()
+    if normalized == "debug":
+        return f"{BOLD}Simulator logs:{NC} {format_sim_log_badge(normalized)}  full simulator chatter visible  {DIM}(press d to return to quiet){NC}"
+    if normalized == "quiet":
+        return f"{BOLD}Simulator logs:{NC} {format_sim_log_badge(normalized)}  repetitive simulator chatter hidden  {DIM}(press d for full debug){NC}"
+    return f"{BOLD}Simulator logs:{NC} {format_sim_log_badge(normalized)}"
 
 
 def print_ascii_banner() -> None:
@@ -327,6 +323,7 @@ def run_logged(
             cwd=cwd,
             env=env,
             text=True,
+            stdin=subprocess.DEVNULL,
             stdout=log_file,
             stderr=subprocess.STDOUT,
             check=False,
@@ -616,6 +613,7 @@ def down_os(config: dict[str, object]) -> None:
             cwd=os_repo,
             env=compose_env,
             text=True,
+            stdin=subprocess.DEVNULL,
             stdout=log_file,
             stderr=subprocess.STDOUT,
             check=False,
@@ -694,6 +692,7 @@ def down_cloud_agent() -> None:
     subprocess.run(
         ["docker", "rm", "-f", "mars-cloud-agent"],
         text=True,
+        stdin=subprocess.DEVNULL,
         check=False,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
@@ -701,6 +700,7 @@ def down_cloud_agent() -> None:
     subprocess.run(
         ["docker", "network", "rm", "mars-cloud_default"],
         text=True,
+        stdin=subprocess.DEVNULL,
         check=False,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
@@ -778,6 +778,7 @@ def start_simulator(config: dict[str, object], sim_python: Path) -> None:
             cmd,
             cwd=sim_repo,
             env=env,
+            stdin=subprocess.DEVNULL,
             stdout=log_file,
             stderr=subprocess.STDOUT,
             start_new_session=True,
@@ -813,6 +814,7 @@ def capture_command_output(
         cwd=cwd,
         env=env,
         text=True,
+        stdin=subprocess.DEVNULL,
         capture_output=True,
         check=False,
     )
@@ -827,6 +829,7 @@ def command_succeeds(
         cwd=cwd,
         env=env,
         text=True,
+        stdin=subprocess.DEVNULL,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
         check=False,
@@ -937,23 +940,10 @@ def capture_agent_logs(config: dict[str, object], lines: int = 18) -> list[str]:
     return output.splitlines()[-lines:]
 
 
-def simulator_log_is_debug(line: str) -> bool:
-    stripped = line.strip()
-    if not stripped:
-        return False
-
-    lowered = stripped.lower()
-    if any(token in lowered for token in ("error", "warning", "failed", "exception")):
-        return False
-
-    return any(pattern.search(stripped) for pattern in SIM_LOG_FILTER_PATTERNS)
-
-
 def capture_simulator_logs(
     simulator_live: bool,
     *,
     lines: int = 18,
-    sim_log_mode: str = "quiet",
 ) -> list[str]:
     if not SIM_LOG_PATH.exists():
         if simulator_live:
@@ -963,16 +953,7 @@ def capture_simulator_logs(
             ]
         return ["Simulator log not created yet."]
     raw_lines = SIM_LOG_PATH.read_text(errors="replace").splitlines()
-    if sim_log_mode == "debug":
-        selected = raw_lines[-lines:]
-    else:
-        tail_window = max(lines * 16, 240)
-        filtered = [
-            line for line in raw_lines[-tail_window:] if not simulator_log_is_debug(line)
-        ]
-        selected = filtered[-lines:]
-        if not selected and raw_lines:
-            selected = ["Simulator quiet mode active. Press d for full debug logs."]
+    selected = raw_lines[-lines:]
     return selected or ["Simulator log is empty."]
 
 
@@ -1536,11 +1517,11 @@ def set_simulator_log_mode(port: str, mode: str) -> bool:
     except (URLError, TimeoutError, json.JSONDecodeError):
         return False
 
-
 def container_running(container_name: str) -> bool:
     result = subprocess.run(
         ["docker", "inspect", "-f", "{{.State.Running}}", container_name],
         text=True,
+        stdin=subprocess.DEVNULL,
         capture_output=True,
         check=False,
     )
@@ -1668,10 +1649,12 @@ def render_status(
     verbose: bool = False,
     history: DashboardHistory | None = None,
     clear: bool = True,
+    snapshot: dict[str, object] | None = None,
 ) -> None:
     if clear:
         clear_screen()
-    snapshot = collect_status_snapshot(config)
+    if snapshot is None:
+        snapshot = collect_status_snapshot(config)
     if history is None:
         history = DashboardHistory()
         history.seed_from_snapshot(snapshot)
@@ -1705,13 +1688,15 @@ def render_status(
             [
                 f"{BOLD}Cloud mode:{NC} {config['mode']}",
                 f"{BOLD}Viewer:{NC} {'on' if config.get('sim_visualization') else 'off'}",
-                f"{BOLD}Sim logs:{NC} {snapshot['sim_log_mode']}",
+                f"{BOLD}Sim logs:{NC} {format_sim_log_badge(str(snapshot['sim_log_mode']))}",
                 f"{BOLD}FPS:{NC} {float(snapshot['primary_fps']):.1f}",
                 f"{BOLD}Frame age:{NC} {float(snapshot['frame_age_ms']):.0f} ms",
                 f"{BOLD}Queue load:{NC} {format_level(str(snapshot['transport_level']), str(snapshot['queue_pressure']))} (peak {snapshot['queue_peak']})",
             ]
         )
     )
+    used_lines += 1
+    print(describe_sim_log_mode(str(snapshot["sim_log_mode"])))
     used_lines += 1
     print(
         "  ".join(
@@ -1734,7 +1719,7 @@ def render_status(
         used_lines += 1
     print(f"{BOLD}Logs:{NC} ./mars-dev logs startup")
     used_lines += 1
-    print(f"{DIM}Keys: q quit  d sim-debug  v verbose  Ctrl+C quit{NC}")
+    print(f"{DIM}Keys: q quit  d toggle sim logs  v verbose  Ctrl+C quit{NC}")
     used_lines += 1
     marquee_lines = render_robot_marquee(term_width)
     for marquee_line in marquee_lines:
@@ -1747,11 +1732,10 @@ def render_status(
     visible_log_rows = max(available_height - 2, 1)
     log_columns = [
         (
-            "SIMULATOR LOGS",
+            f"SIMULATOR LOGS [{str(snapshot['sim_log_mode']).upper()}]",
             capture_simulator_logs(
                 bool(snapshot["sim_running"]),
                 lines=visible_log_rows,
-                sim_log_mode=str(snapshot["sim_log_mode"]),
             ),
             THEME["log_sim"],
         ),
@@ -1786,10 +1770,17 @@ def render_status_text(
     *,
     verbose: bool = False,
     history: DashboardHistory | None = None,
+    snapshot: dict[str, object] | None = None,
 ) -> str:
     buffer = io.StringIO()
     with contextlib.redirect_stdout(buffer):
-        render_status(config, verbose=verbose, history=history, clear=False)
+        render_status(
+            config,
+            verbose=verbose,
+            history=history,
+            clear=False,
+            snapshot=snapshot,
+        )
     return buffer.getvalue()
 
 
@@ -1843,7 +1834,7 @@ def live_dashboard_terminal():
 
 
 def watch_dashboard(
-    config: dict[str, object], *, verbose: bool = False, refresh_seconds: float = 1.5
+    config: dict[str, object], *, verbose: bool = False, refresh_seconds: float = 0.5
 ) -> None:
     redraw = True
     history = DashboardHistory()
@@ -1860,7 +1851,12 @@ def watch_dashboard(
                     sim_log_mode = str(snapshot.get("sim_log_mode", sim_log_mode))
                     sys.stdout.write("\033[H\033[J")
                     sys.stdout.write(
-                        render_status_text(config, verbose=verbose, history=history)
+                        render_status_text(
+                            config,
+                            verbose=verbose,
+                            history=history,
+                            snapshot=snapshot,
+                        )
                     )
                     sys.stdout.flush()
                     next_refresh = now + refresh_seconds
