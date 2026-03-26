@@ -1557,10 +1557,34 @@ def print_log_columns(
     columns: list[tuple[str, list[str], tuple[int, int, int]]], *, available_height: int
 ) -> None:
     width = shutil.get_terminal_size((150, 40)).columns
-    box_height = max(available_height, 8)
+    if available_height < 3:
+        print(
+            colorize(
+                "Terminal too short for live log panes. Enlarge the window to show them.",
+                fg=THEME["dim"],
+                dim=True,
+            )
+        )
+        return
+
     if len(columns) == 1 or width < 120:
-        for title, lines, border_rgb in columns:
-            print()
+        gap_lines = 1 if available_height >= len(columns) * 5 else 0
+        total_gap_lines = gap_lines * max(len(columns) - 1, 0)
+        remaining_for_boxes = max(available_height - total_gap_lines, len(columns))
+        box_height = remaining_for_boxes // len(columns)
+        if box_height < 3:
+            print(
+                colorize(
+                    "Terminal too short for stacked log panes. Enlarge the window to show them.",
+                    fg=THEME["dim"],
+                    dim=True,
+                )
+            )
+            return
+
+        for index, (title, lines, border_rgb) in enumerate(columns):
+            if index > 0 and gap_lines:
+                print()
             for row in render_log_box(
                 title, lines, width=width, height=box_height, border_rgb=border_rgb
             ):
@@ -1568,6 +1592,7 @@ def print_log_columns(
         return
 
     gap = 2
+    box_height = max(available_height, 3)
     inner_width = max((width - gap * (len(columns) - 1)) // len(columns), 24)
     rendered_columns = [
         render_log_box(
@@ -1784,6 +1809,9 @@ def render_status(
     term_height = term_size.lines
     used_lines = 0
 
+    if term_height >= 28:
+        print()
+        used_lines += 1
     print_ascii_banner()
     used_lines += len(ASCII_BANNER)
     print(f"{DIM}sim stack dashboard{NC}")
@@ -1848,8 +1876,8 @@ def render_status(
 
     if verbose:
         used_lines += 5
-    available_height = max(term_height - used_lines, 10)
-    visible_log_rows = max(available_height - 2, 1)
+    available_height = max(term_height - used_lines, 0)
+    visible_log_rows = max(available_height, 3)
     simulator_lines = (
         cached_logs["simulator"]
         if cached_logs is not None and "simulator" in cached_logs
