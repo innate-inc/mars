@@ -56,6 +56,9 @@ This repository contains all the hardware design files you need to build a Mars 
 ### 📁 [PCBs](pcbs/)
 KiCad projects and production files for the head PCB and main development board. See the [pcbs README](pcbs/README.md) for details.
 
+### 💻 [OS & Simulator Entry Point](os/)
+Developer-facing launcher for the Mars software stack. This is the Phase 1 entrypoint for starting the Innate OS, simulator, and optional local cloud agent from one `.env`.
+
 ### 📄 Documentation
 - **[Bill of Materials](BOM.md)** - Complete parts list with sourcing information
 - **[Assembly Guide](assemblies.zip)** - Step-by-step assembly instructions
