@@ -1,20 +1,77 @@
-﻿Designator,Footprint,Quantity,Value,LCSC Part #
-"C1, C2, C8",0603,3,100nF,
-C3,0603,1,10uF,
-C4,0805,1,22uF,
-"C5, C6",0603,2,10nF,
-C7,CAP_10TPB220ML,1,10TPB220ML,
-"CON1, CON2",B4B-ZR,2,B4B-ZR,
-D1,DIOM5226X240N,1,B340A-13-F,
-"J1, J5",PinHeader_1x03_P2.54mm_Vertical,2,Conn_01x03_Pin,
-J10,PinHeader_1x05_P2.54mm_Vertical,1,Conn_01x05,
-J11,AMASS_XT60PW-M,1,XT60PW-M,
-"J2, J3, J4, J7",PHOENIX_1935161,4,1935161,
-"J8, J9",PinHeader_1x14_P2.54mm_Vertical,2,Conn_01x14,
-L2,IND_MGAH0603150M-10,1,FXL0630-150-M,
-"R1, R3, R4",0603,3,4.7k,
-"R10, R5, R7, R8, R9",0603,5,10k,
-R2,0603,1,13.3k,
-R6,0603,1,3.24k,
-U1,TI_SO-PowerPAD-8_ThermalVias,1,TPS5430DDA,
-U2,LGA-24L_3x3.5mm_P0.43mm,1,LSM9DS1,
+"Reference","Value","DNP","Exclude from BOM","Exclude from Board","Footprint","LCSC Part #"
+"D2,D5","SMBJ33CA","","","","SMBJ33CA:DIOM4336X265N","C78420"
+"J7,J19","1935161","","","","TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal","C8404"
+"C7","10TPB220ML","","","","10TPB220ML:CAP_10TPB220ML","C347545"
+"L2","FXL0630-150-M","","","","FXL0630-150-M:INDM7066X300N","C177243"
+"D1","B340A-13-F","","","","B340A-13-F:DIOM5226X240N","C908680"
+"J6","XT60PW-M","","","","AMASS_XT60PW-M:AMASS_XT60PW-M","C98732"
+"USB1","~","","","","Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12","C165948"
+"U10","SN74LVC1G125DBV","","","","Package_TO_SOT_SMD:SOT-23-5","C23654"
+"U9","AMS1117-3.3","","","","Package_TO_SOT_SMD:SOT-223-3_TabPin2","C347222"
+"U8","CH343P","","","","Package_DFN_QFN:WCH_QFN-16-1EP_3x3mm_P0.5mm_EP1.8x1.8mm","C2846043"
+"U7","MIC5504-1.8YM5","","","","Package_TO_SOT_SMD:SOT-23-5","C3040643"
+"U6","BTS50010-1TAD","","","","Package_TO_SOT_SMD:TO-263-7_TabPin4","C2150443"
+"U5","TPS259482AYWPR","","","","tps25948:YWP0012A-MFG","C22422005"
+"U4","ICM-20948","","","","Sensor_Motion:InvenSense_QFN-24_3x3mm_P0.4mm"," C726001"
+"U3","SN74LVC1G126DBV","","","","Package_TO_SOT_SMD:SOT-23-5"," C7834"
+"U2","MAX98357A","","","","Package_DFN_QFN:TQFN-16-1EP_3x3mm_P0.5mm_EP1.23x1.23mm","C910544"
+"U1","TPS5430DDA","","","","Package_SO:TI_SO-PowerPAD-8_ThermalVias","C9864"
+"R37,R38","100","","","","Resistor_SMD:R_0402_1005Metric","C25076"
+"R36","470","","","","Resistor_SMD:R_0402_1005Metric","C25167"
+"R35,R40,R41","1.8k","","","","Resistor_SMD:R_0402_1005Metric","C25932"
+"R32,R39","100k","","","","Resistor_SMD:R_0402_1005Metric","C25741"
+"R28,R29","5k1","","","","Resistor_SMD:R_0402_1005Metric","C25905"
+"R24,R25,R26,R27","2.2k","","","","Resistor_SMD:R_0402_1005Metric","C25879"
+"R23","1k","","","","Resistor_SMD:R_0402_1005Metric","C11702"
+"R20","4","","","","Resistor_SMD:R_0402_1005Metric","C270603"
+"R18,R19","10k","","","","Resistor_SMD:R_0402_1005Metric","C25744"
+"R14","42.2k","","","","Resistor_SMD:R_0402_1005Metric","C26979"
+"R13","470k","","","","Resistor_SMD:R_0402_1005Metric","C25790"
+"R12","887","","","","Resistor_SMD:R_0402_1005Metric","C474137"
+"R11","47k","","","","Resistor_SMD:R_0402_1005Metric","C25792"
+"R10","133k","","","","Resistor_SMD:R_0402_1005Metric"," C25753"
+"R8,R9,R33,R34","10K","","","","Resistor_SMD:R_0402_1005Metric","C25744"
+"R7","20K","","","","Resistor_SMD:R_0402_1005Metric","C25765"
+"R6","3.24k","","","","Resistor_SMD:R_0603_1608Metric","C22994"
+"R5","10k","","","","Resistor_SMD:R_0603_1608Metric","C15401"
+"R3,R21,R22,R30","4.7k","","","","Resistor_SMD:R_0402_1005Metric","C25900"
+"R2","634K","","","","Resistor_SMD:R_0402_1005Metric","C270588"
+"R1","100K","","","","Resistor_SMD:R_0402_1005Metric","C25741"
+"Q5","CSD18540Q5B","","","","Package_TO_SOT_SMD:TDSON-8-1"," C86513"
+"Q3,Q4,Q6","2N7002","","","","Package_TO_SOT_SMD:SOT-23","C8545"
+"Q1","MMBT3906","","","","Package_TO_SOT_SMD:SOT-23","C53444"
+"J30","Conn_02x03_Odd_Even","","","","Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical","C124384"
+"J23","Conn_01x02","","","","Connector_PinSocket_2.54mm:PinSocket_1x02_P2.54mm_Vertical","C18078125"
+"J20,J21","Conn_01x02","","","","Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical","C160315"
+"J17","Conn_01x07","","","","Connector_PinSocket_2.54mm:PinSocket_1x07_P2.54mm_Vertical","C18078130"
+"J14","Conn_01x13","","","","Connector_PinSocket_2.54mm:PinSocket_1x13_P2.54mm_Vertical","C2685211"
+"J11","Conn_01x04","","","","Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Vertical","C7499324"
+"J10,J16","Conn_01x05","","","","Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical","C18078128"
+"J8,J9","Conn_01x14","","","","Connector_PinSocket_2.54mm:PinSocket_1x14_P2.54mm_Vertical","C18078135"
+"J5,J12,J15,J18","Conn_01x03","","","","Connector_PinSocket_2.54mm:PinSocket_1x03_P2.54mm_Vertical","C146243"
+"J3,J4","Conn_01x03","","","","Connector_JST:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical","C398546"
+"J2","Conn_01x02","","","","Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical","C158012"
+"J1","Conn_02x20_Odd_Even","","","","Connector_PinSocket_2.54mm:PinSocket_2x20_P2.54mm_Vertical","C2682225"
+"IC1","AP74700QW6-7","","","","SOT-26:SOT95P280X145-6N","C5381661"
+"FB1,FB2","FerriteBead","","","","Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder","C85817"
+"D4","B5819WS","","","","Diode_SMD:D_SOD-323","C22624"
+"D3,D6,D7,D8,D9","LED","","","","Diode_SMD:D_0603_1608Metric","C12065"
+"CON1,CON2","B4B-ZR","","","","B4B-ZR:B4B-ZR","C157997"
+"C38","10uF","","","","10uFTant:CAPMP3516X190N","C7194"
+"C37","220uF","","","","Capacitor_SMD:C_Elec_8x10.2","C341198"
+"C34","22nF","","","","Capacitor_SMD:C_0402_1005Metric","C76703"
+"C28","470uF","","","","Capacitor_SMD:C_Elec_10x10.2"," C242138"
+"C24","22uF","","","","10uFTant:CAPMP3516X190N","C2158664"
+"C19","10uF","","","","Capacitor_SMD:C_0603_1608Metric","C19702"
+"C15,C16,C21,C23,C25,C35","1uF","","","","Capacitor_SMD:C_0603_1608Metric","C29936"
+"C13","150nF","","","","Capacitor_SMD:C_0402_1005Metric","C5448879"
+"C11,C14","10nF","","","","Capacitor_SMD:C_0402_1005Metric","C76702"
+"C10","4.3nF","","","","Capacitor_SMD:C_0402_1005Metric","C181747"
+"C9","2.2nF","","","","Capacitor_SMD:C_0402_1005Metric","C541386"
+"C8,C12,C17,C18,C20,C22,C26,C27,C30,C39",".1uF","","","","Capacitor_SMD:C_0402_1005Metric","C56392"
+"C5","10nF","","","","Capacitor_SMD:C_0603_1608Metric","C1691"
+"C4,C6,C29","10uF","","","","Capacitor_SMD:C_0805_2012Metric","C3039694"
+"C3,C36","220pf","","","","Capacitor_SMD:C_0402_1005Metric","C117751"
+"C2",".1uf","","","","Capacitor_SMD:C_0402_1005Metric","C56392"
+"C1","10uf","","","","Capacitor_SMD:C_0603_1608Metric","C19702"
+"BZ1","Buzzer","","","","Buzzer:XDCR_KXG1205C","C1122355"

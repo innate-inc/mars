@@ -23,15 +23,15 @@ The head PCB controls sensors and actuators in the robot's head assembly.
 ### Main Development Board
 **Location**: `main-dev-board/`
 
-The main development board is the brain of the robot, handling computation and motor control.
+The main development board is the brain of the robot, handling computation and motor control."C:\Users\nick\Documents\Innate\mars\pcbs\main-dev-board\MARS%20Dev%20Board.kicad_pro"
 
-- **KiCad Project**: [innate dev pcb.kicad_pro](main-dev-board/innate%20dev%20pcb.kicad_pro)
-- **Schematic**: [innate dev pcb.kicad_sch](main-dev-board/innate%20dev%20pcb.kicad_sch)
-- **PCB Layout**: [innate dev pcb.kicad_pcb](main-dev-board/innate%20dev%20pcb.kicad_pcb)
-- **3D Model**: [innate dev pcb.step](main-dev-board/innate%20dev%20pcb.step)
+- **KiCad Project**: [innate dev pcb.kicad_pro](main-dev-board/MARS%20Dev%20Board.kicad_pro)
+- **Schematic**: [innate dev pcb.kicad_sch](main-dev-board/MARS%20Dev%20Board.kicad_sch)
+- **PCB Layout**: [innate dev pcb.kicad_pcb](main-dev-board/MARS%20Dev%20Board.kicad_pcb)
+- **3D Model**: [innate dev pcb.step](main-dev-board/MARS%20Dev%20Board.step)
 
 **Production Files** (`main-dev-board/production/`):
-- [Gerbers & Drill Files](main-dev-board/production/innate_dev_pcb.zip)
+- [Gerbers & Drill Files](main-dev-board/production/MARS_Dev_Board.zip)
 - [BOM (Bill of Materials)](main-dev-board/production/bom.csv)
 - [Component Positions](main-dev-board/production/positions.csv)
 - [Designators Reference](main-dev-board/production/designators.csv)
