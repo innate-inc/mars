@@ -1,0 +1,9 @@
+services:
+  cloud-agent:
+    container_name: mars-cloud-agent
+    image: ${MARS_CLOUD_AGENT_IMAGE}
+    env_file:
+      - ${MARS_CLOUD_AGENT_ENV_FILE}
+    ports:
+      - "${MARS_CLOUD_AGENT_PORT:-8765}:8765"
+    restart: unless-stopped
