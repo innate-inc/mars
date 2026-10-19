@@ -1,0 +1,23 @@
+name: MARS physics model
+on:
+  pull_request:
+    paths:
+      - 'models/mars_description/**'
+      - '.github/workflows/physics-model.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'models/mars_description/**'
+      - '.github/workflows/physics-model.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install mujoco==3.10.0 numpy==2.2.6
+      - run: python models/mars_description/test/test_physics.py

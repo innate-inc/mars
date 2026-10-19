@@ -56,6 +56,12 @@ This repository contains all the hardware design files you need to build a Mars 
 ### 📁 [PCBs](pcbs/)
 KiCad projects and production files for the head PCB and main development board. See the [pcbs README](pcbs/README.md) for details.
 
+### Robot Models
+
+[URDFs and bundled meshes](models/mars_description/README.md): the fixed-wheel
+reference model and an experimental articulated-wheel physics variant, with
+MuJoCo validation tests and documented calibration assumptions.
+
 ### 📄 Documentation
 - **[Bill of Materials](BOM.md)** - Complete parts list with sourcing information
 - **[Assembly Guide](assemblies.zip)** - Step-by-step assembly instructions
